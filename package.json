@@ -9,12 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~5.0.4",
     "@tamagui/babel-plugin": "^1.129.4",
     "@tamagui/config": "^1.129.4",
     "@tamagui/font-inter": "^1.129.4",
     "expo": "~53.0.13",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-native": "0.79.4",
     "tamagui": "^1.129.4"
   },
