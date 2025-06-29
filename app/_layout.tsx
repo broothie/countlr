@@ -12,7 +12,7 @@ function RootNavigator() {
   return (
     <Stack screenOptions={{ title: "Countlr" }}>
       <Stack.Protected guard={!!user}>
-        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
       </Stack.Protected>
 
       <Stack.Protected guard={!user}>
