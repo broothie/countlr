@@ -75,12 +75,9 @@ export default function EventsPage() {
   return (
     <YStack flex={1} space="$4" p="$4">
       <XStack
-        style={{ justifyContent: "space-between", alignItems: "center" }}
+        style={{ justifyContent: "flex-end", alignItems: "center" }}
         p="$2"
       >
-        <Text fontSize="$4" fontWeight="bold">
-          Welcome, {user.email}
-        </Text>
         <Button
           size="$2"
           onPress={handleSignOut}
