@@ -11,6 +11,7 @@ export default function RootLayout() {
       <TamaguiProvider config={tamaguiConfig}>
         <Stack>
           <Stack.Screen name="index" options={{ title: "Events" }} />
+          <Stack.Screen name="auth" options={{ title: "Welcome" }} />
         </Stack>
       </TamaguiProvider>
     </QueryClientProvider>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
-import { useSignIn, useSignUp } from "../lib/auth-hooks";
+import { useSignIn, useSignUp } from "../src/lib/auth-hooks";
 
-export function AuthScreen() {
+export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +12,13 @@ export function AuthScreen() {
   const signUpMutation = useSignUp();
 
   const mutation = isSignUp ? signUpMutation : signInMutation;
+
+  // Navigate to main app on successful auth
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      router.replace("/");
+    }
+  }, [mutation.isSuccess]);
 
   const handleSubmit = () => {
     if (!email || !password) return;

@@ -1,6 +1,6 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
-import { AuthScreen } from "../src/components/AuthScreen";
 import { useAuth, useSignOut } from "../src/lib/auth-hooks";
 import {
   useCreateEvent,
@@ -42,7 +42,8 @@ export default function EventsPage() {
   }
 
   if (!user) {
-    return <AuthScreen />;
+    router.replace("/auth");
+    return null;
   }
 
   if (isLoading) {
