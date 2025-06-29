@@ -30,6 +30,10 @@ export default function EventsPage() {
     setNewEventName("");
   };
 
+  const handleEventPress = (eventId: string) => {
+    router.push(`/event/${eventId}`);
+  };
+
   if (loading) {
     return (
       <YStack
@@ -130,12 +134,14 @@ export default function EventsPage() {
           backgroundColor="$background"
           borderColor="$borderColor"
           borderWidth={1}
+          pressStyle={{ opacity: 0.8 }}
+          onPress={() => handleEventPress(event.id)}
         >
           <XStack
             flexDirection="row"
             style={{ justifyContent: "space-between", alignItems: "center" }}
           >
-            <YStack>
+            <YStack flex={1}>
               <Text fontSize="$5" fontWeight="bold">
                 {event.name}
               </Text>
@@ -144,7 +150,10 @@ export default function EventsPage() {
             <Button
               size="$3"
               circular
-              onPress={() => handleIncrement(event.id)}
+              onPress={(e) => {
+                e.stopPropagation();
+                handleIncrement(event.id);
+              }}
               bg="$blue10"
               color="white"
               disabled={incrementMutation.isPending}

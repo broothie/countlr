@@ -13,6 +13,12 @@ function RootNavigator() {
     <Stack screenOptions={{ title: "Countlr" }}>
       <Stack.Protected guard={!!user}>
         <Stack.Screen name="index" />
+        <Stack.Screen
+          name="event/[id]"
+          options={{
+            title: "Event Details",
+          }}
+        />
       </Stack.Protected>
 
       <Stack.Protected guard={!user}>

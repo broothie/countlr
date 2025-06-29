@@ -91,3 +91,40 @@ export const useCreateEvent = () => {
     },
   });
 };
+
+export const useEvent = (
+  eventId: string | undefined,
+  enabled: boolean = true,
+) => {
+  return useQuery({
+    queryKey: ["event", eventId],
+    queryFn: async (): Promise<EventWithCount> => {
+      if (!eventId) {
+        throw new Error("Event ID is required");
+      }
+
+      const { data: event, error: eventError } = await supabase
+        .from("events")
+        .select("*")
+        .eq("id", eventId)
+        .single();
+
+      if (eventError) {
+        throw new Error(`Error fetching event: ${eventError.message}`);
+      }
+
+      const { count, error: countError } = await supabase
+        .from("event_occurrences")
+        .select("*", { count: "exact", head: true })
+        .eq("event_id", eventId);
+
+      if (countError) {
+        console.error("Error fetching count for event:", eventId, countError);
+        return { ...event, count: 0 };
+      }
+
+      return { ...event, count: count || 0 };
+    },
+    enabled: enabled && !!eventId,
+  });
+};
