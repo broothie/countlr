@@ -9,9 +9,9 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <TamaguiProvider config={tamaguiConfig}>
-        <Stack>
-          <Stack.Screen name="index" options={{ title: "Events" }} />
-          <Stack.Screen name="auth" options={{ title: "Welcome" }} />
+        <Stack screenOptions={{ title: "Countlr" }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="auth" />
         </Stack>
       </TamaguiProvider>
     </QueryClientProvider>
