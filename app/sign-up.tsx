@@ -1,29 +1,24 @@
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
-import { useSignIn, useSignUp } from "../src/lib/auth-hooks";
+import { useSignUp } from "../src/lib/auth-hooks";
 
-export default function AuthPage() {
-  const [isSignUp, setIsSignUp] = useState(false);
+export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signInMutation = useSignIn();
   const signUpMutation = useSignUp();
-
-  const mutation = isSignUp ? signUpMutation : signInMutation;
 
   // Navigate to main app on successful auth
   useEffect(() => {
-    if (mutation.isSuccess) {
+    if (signUpMutation.isSuccess) {
       router.replace("/");
     }
-  }, [mutation.isSuccess]);
+  }, [signUpMutation.isSuccess]);
 
   const handleSubmit = () => {
     if (!email || !password) return;
-
-    mutation.mutate({ email, password });
+    signUpMutation.mutate({ email, password });
   };
 
   return (
@@ -35,7 +30,7 @@ export default function AuthPage() {
       <Card p="$6" style={{ width: "100%", maxWidth: 400 }}>
         <YStack space="$4">
           <Text fontSize="$8" fontWeight="bold" style={{ textAlign: "center" }}>
-            {isSignUp ? "Create Account" : "Sign In"}
+            Create Account
           </Text>
 
           <Input
@@ -55,35 +50,29 @@ export default function AuthPage() {
             autoComplete="password"
           />
 
-          {mutation.error && (
+          {signUpMutation.error && (
             <Text color="$red10" style={{ textAlign: "center" }}>
-              {mutation.error.message}
+              {signUpMutation.error.message}
             </Text>
           )}
 
           <Button
             onPress={handleSubmit}
-            disabled={mutation.isPending || !email || !password}
+            disabled={signUpMutation.isPending || !email || !password}
             bg="$blue10"
             color="white"
           >
-            {mutation.isPending
-              ? "Loading..."
-              : isSignUp
-              ? "Sign Up"
-              : "Sign In"}
+            {signUpMutation.isPending ? "Loading..." : "Sign Up"}
           </Button>
 
           <XStack style={{ justifyContent: "center" }} space="$2">
-            <Text>
-              {isSignUp ? "Already have an account?" : "Don't have an account?"}
-            </Text>
+            <Text>Already have an account?</Text>
             <Button
               variant="outlined"
               size="$2"
-              onPress={() => setIsSignUp(!isSignUp)}
+              onPress={() => router.push("/sign-in")}
             >
-              {isSignUp ? "Sign In" : "Sign Up"}
+              Sign In
             </Button>
           </XStack>
         </YStack>
