@@ -1,86 +1,32 @@
-import { useEffect, useState } from "react";
 import { Button, Card, Text, XStack, YStack } from "tamagui";
-import { EventWithCount, supabase } from "../src/lib/supabase";
+import { useEvents, useIncrementEvent } from "../src/lib/hooks";
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<EventWithCount[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: events = [], isLoading, error } = useEvents();
+  const incrementMutation = useIncrementEvent();
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      // Fetch events with their occurrence counts
-      const { data: eventsData, error: eventsError } = await supabase
-        .from("events")
-        .select("*")
-        .order("created_at", { ascending: true });
-
-      if (eventsError) {
-        console.error("Error fetching events:", eventsError);
-        return;
-      }
-
-      console.log({ events });
-
-      // Fetch occurrence counts for each event
-      const eventsWithCounts = await Promise.all(
-        eventsData.map(async (event) => {
-          const { count, error: countError } = await supabase
-            .from("event_occurrences")
-            .select("*", { count: "exact", head: true })
-            .eq("event_id", event.id);
-
-          if (countError) {
-            console.error(
-              "Error fetching count for event:",
-              event.id,
-              countError,
-            );
-            return { ...event, count: 0 };
-          }
-
-          return { ...event, count: count || 0 };
-        }),
-      );
-
-      setEvents(eventsWithCounts);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleIncrement = (eventId: string) => {
+    incrementMutation.mutate(eventId);
   };
 
-  const incrementCount = async (eventId: string) => {
-    try {
-      // Insert a new occurrence
-      const { error } = await supabase
-        .from("event_occurrences")
-        .insert({ event_id: eventId });
-
-      if (error) {
-        console.error("Error creating occurrence:", error);
-        return;
-      }
-
-      // Update local state
-      setEvents((prev) =>
-        prev.map((event) =>
-          event.id === eventId ? { ...event, count: event.count + 1 } : event,
-        ),
-      );
-    } catch (error) {
-      console.error("Error creating occurrence:", error);
-    }
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <YStack flex={1} justifyContent="center" alignItems="center">
+      <YStack
+        flex={1}
+        style={{ justifyContent: "center", alignItems: "center" }}
+      >
         <Text>Loading events...</Text>
+      </YStack>
+    );
+  }
+
+  if (error) {
+    return (
+      <YStack
+        flex={1}
+        style={{ justifyContent: "center", alignItems: "center" }}
+      >
+        <Text>Error: {error.message}</Text>
       </YStack>
     );
   }
@@ -97,8 +43,7 @@ export default function EventsPage() {
         >
           <XStack
             flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
+            style={{ justifyContent: "space-between", alignItems: "center" }}
           >
             <YStack>
               <Text fontSize="$5" fontWeight="bold">
@@ -109,9 +54,10 @@ export default function EventsPage() {
             <Button
               size="$3"
               circular
-              onPress={() => incrementCount(event.id)}
+              onPress={() => handleIncrement(event.id)}
               bg="$blue10"
               color="white"
+              disabled={incrementMutation.isPending}
             >
               +
             </Button>
