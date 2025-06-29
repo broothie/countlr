@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
-import { useSignIn, useSignUp } from "../lib/hooks";
+import { useSignIn, useSignUp } from "../lib/auth-hooks";
 
 export function AuthScreen() {
   const [isSignUp, setIsSignUp] = useState(false);

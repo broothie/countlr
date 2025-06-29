@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
 import { AuthScreen } from "../src/components/AuthScreen";
+import { useAuth, useSignOut } from "../src/lib/auth-hooks";
 import {
-  useAuth,
   useCreateEvent,
   useEvents,
   useIncrementEvent,
-  useSignOut,
-} from "../src/lib/hooks";
+} from "../src/lib/event-hooks";
 
 export default function EventsPage() {
   const { user, loading } = useAuth();
