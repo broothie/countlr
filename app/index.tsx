@@ -1,12 +1,12 @@
 import { router } from "expo-router";
 import { useState } from "react";
 import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
-import { useAuth, useSignOut } from "../../src/lib/auth-hooks";
+import { useAuth, useSignOut } from "../src/lib/auth-hooks";
 import {
   useCreateEvent,
   useEvents,
   useIncrementEvent,
-} from "../../src/lib/event-hooks";
+} from "../src/lib/event-hooks";
 
 export default function EventsPage() {
   const { user, loading } = useAuth();
@@ -42,7 +42,7 @@ export default function EventsPage() {
   }
 
   if (!user) {
-    router.replace("/auth");
+    router.replace("/sign-in");
     return null;
   }
 

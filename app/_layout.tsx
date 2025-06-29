@@ -12,7 +12,7 @@ function RootNavigator() {
   return (
     <Stack screenOptions={{ title: "Countlr" }}>
       <Stack.Protected guard={!!user}>
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="index" />
       </Stack.Protected>
 
       <Stack.Protected guard={!user}>
@@ -32,7 +32,6 @@ function RootNavigator() {
     </Stack>
   );
 }
-
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
