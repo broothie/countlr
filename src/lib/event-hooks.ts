@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EventWithCount, supabase } from "./supabase";
+import { EventOccurrence, EventWithCount, supabase } from "./supabase";
 
 export const useEvents = (enabled: boolean = true) => {
   return useQuery({
@@ -65,6 +65,12 @@ export const useIncrementEvent = () => {
           event.id === eventId ? { ...event, count: event.count + 1 } : event,
         );
       });
+
+      // Invalidate occurrences queries for this event
+      queryClient.invalidateQueries({
+        queryKey: ["event-occurrences", eventId],
+        exact: false,
+      });
     },
   });
 };
@@ -124,6 +130,59 @@ export const useEvent = (
       }
 
       return { ...event, count: count || 0 };
+    },
+    enabled: enabled && !!eventId,
+  });
+};
+
+export const useEventOccurrences = (
+  eventId: string | undefined,
+  timeframe: "hour" | "day" | "week" | "month" | "year" = "day",
+  enabled: boolean = true,
+) => {
+  return useQuery({
+    queryKey: ["event-occurrences", eventId, timeframe],
+    queryFn: async (): Promise<EventOccurrence[]> => {
+      if (!eventId) {
+        throw new Error("Event ID is required");
+      }
+
+      const now = new Date();
+      let startDate: Date;
+
+      switch (timeframe) {
+        case "hour":
+          startDate = new Date(now.getTime() - 60 * 60 * 1000);
+          break;
+        case "day":
+          startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case "week":
+          startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case "month":
+          startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        case "year":
+          startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+          break;
+        default:
+          startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      }
+
+      const { data, error } = await supabase
+        .from("event_occurrences")
+        .select("*")
+        .eq("event_id", eventId)
+        .gte("created_at", startDate.toISOString())
+        .lte("created_at", now.toISOString())
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        throw new Error(`Error fetching occurrences: ${error.message}`);
+      }
+
+      return data || [];
     },
     enabled: enabled && !!eventId,
   });
