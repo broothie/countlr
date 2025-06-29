@@ -1,13 +1,50 @@
-import { Button, Card, Text, XStack, YStack } from "tamagui";
-import { useEvents, useIncrementEvent } from "../src/lib/hooks";
+import { useState } from "react";
+import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
+import { AuthScreen } from "../src/components/AuthScreen";
+import {
+  useAuth,
+  useCreateEvent,
+  useEvents,
+  useIncrementEvent,
+  useSignOut,
+} from "../src/lib/hooks";
 
 export default function EventsPage() {
-  const { data: events = [], isLoading, error } = useEvents();
+  const { user, loading } = useAuth();
+  const { data: events = [], isLoading, error } = useEvents(!!user);
   const incrementMutation = useIncrementEvent();
+  const signOutMutation = useSignOut();
+  const createEventMutation = useCreateEvent();
+  const [newEventName, setNewEventName] = useState("");
 
   const handleIncrement = (eventId: string) => {
     incrementMutation.mutate(eventId);
   };
+
+  const handleSignOut = () => {
+    signOutMutation.mutate();
+  };
+
+  const handleCreateEvent = () => {
+    if (!newEventName.trim()) return;
+    createEventMutation.mutate(newEventName.trim());
+    setNewEventName("");
+  };
+
+  if (loading) {
+    return (
+      <YStack
+        flex={1}
+        style={{ justifyContent: "center", alignItems: "center" }}
+      >
+        <Text>Loading...</Text>
+      </YStack>
+    );
+  }
+
+  if (!user) {
+    return <AuthScreen />;
+  }
 
   if (isLoading) {
     return (
@@ -33,6 +70,59 @@ export default function EventsPage() {
 
   return (
     <YStack flex={1} space="$4" p="$4">
+      <XStack
+        style={{ justifyContent: "space-between", alignItems: "center" }}
+        p="$2"
+      >
+        <Text fontSize="$4" fontWeight="bold">
+          Welcome, {user.email}
+        </Text>
+        <Button
+          size="$2"
+          onPress={handleSignOut}
+          bg="$red10"
+          color="white"
+          disabled={signOutMutation.isPending}
+        >
+          Sign Out
+        </Button>
+      </XStack>
+
+      <Card
+        p="$4"
+        backgroundColor="$background"
+        borderColor="$borderColor"
+        borderWidth={1}
+      >
+        <YStack space="$3">
+          <Text fontSize="$5" fontWeight="bold">
+            Create New Event
+          </Text>
+          <XStack space="$2">
+            <Input
+              flex={1}
+              placeholder="Event name"
+              value={newEventName}
+              onChangeText={setNewEventName}
+              onSubmitEditing={handleCreateEvent}
+            />
+            <Button
+              onPress={handleCreateEvent}
+              disabled={createEventMutation.isPending || !newEventName.trim()}
+              bg="$green10"
+              color="white"
+            >
+              {createEventMutation.isPending ? "Creating..." : "Create"}
+            </Button>
+          </XStack>
+          {createEventMutation.error && (
+            <Text color="$red10" fontSize="$2">
+              {createEventMutation.error.message}
+            </Text>
+          )}
+        </YStack>
+      </Card>
+
       {events.map((event) => (
         <Card
           key={event.id}
