@@ -1,20 +1,19 @@
-import { Button } from "tamagui";
+import {Pressable} from "react-native";
+import {Text} from "tamagui";
 
 interface CreateEventHeaderButtonProps {
-  onPress: () => void;
+	onPress: () => void;
 }
 
-export function CreateEventHeaderButton({ onPress }: CreateEventHeaderButtonProps) {
-  return (
-    <Button
-      size="$2"
-      circular
-      onPress={onPress}
-      bg="$green10"
-      color="white"
-      mr="$3"
-    >
-      +
-    </Button>
-  );
+export function CreateEventHeaderButton({onPress}: CreateEventHeaderButtonProps) {
+	return (
+		<Pressable onPress={onPress}>
+			<Text
+				color="$blue10"
+				fontSize="$5"
+			>
+				Add Event
+			</Text>
+		</Pressable>
+	);
 }

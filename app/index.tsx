@@ -1,14 +1,11 @@
-import { router, Stack } from "expo-router";
-import { useState } from "react";
-import { Button, Text, XStack, YStack } from "tamagui";
-import { useAuth, useSignOut } from "../src/lib/auth-hooks";
-import {
-  useEvents,
-  useIncrementEvent,
-} from "../src/lib/event-hooks";
-import { CreateEventHeaderButton } from "../src/components/CreateEventHeaderButton";
-import { CreateEventModal } from "../src/components/CreateEventModal";
-import { EventCard } from "../src/components/EventCard";
+import {router, Stack} from "expo-router";
+import {useState} from "react";
+import {Button, Text, XStack, YStack} from "tamagui";
+import {useAuth, useSignOut} from "../src/lib/auth-hooks";
+import {useEvents, useIncrementEvent,} from "../src/lib/event-hooks";
+import {CreateEventHeaderButton} from "../src/components/CreateEventHeaderButton";
+import {CreateEventModal} from "../src/components/CreateEventModal";
+import {EventCard} from "../src/components/EventCard";
 
 export default function EventsPage() {
   const { user, loading } = useAuth();
@@ -74,6 +71,7 @@ export default function EventsPage() {
           ),
         }}
       />
+
       <YStack flex={1} gap="$4" p="$4">
         <XStack
           style={{ justifyContent: "flex-end", alignItems: "center" }}
