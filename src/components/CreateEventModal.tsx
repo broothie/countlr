@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Input, Sheet, Text, XStack, YStack } from "tamagui";
+import { Modal } from "react-native";
+import { Button, Input, Text, XStack, YStack } from "tamagui";
 import { useCreateEvent } from "../lib/event-hooks";
 
 interface CreateEventModalProps {
@@ -19,17 +20,15 @@ export function CreateEventModal({ isOpen, onOpenChange }: CreateEventModalProps
   };
 
   return (
-    <Sheet
-      modal
-      open={isOpen}
-      onOpenChange={onOpenChange}
-      snapPointsMode="fit"
-      dismissOnSnapToBottom
+    <Modal
+      visible={isOpen}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={() => onOpenChange(false)}
     >
-      <Sheet.Frame p="$4" bg="$background" pb="$6">
-        <Sheet.Handle />
-        <YStack gap="$4" pb="$4">
-          <Text fontSize="$6" fontWeight="bold" style={{ textAlign: 'center' }}>
+      <YStack flex={1} p="$4" bg="$background" justifyContent="center">
+        <YStack gap="$4" maxWidth={400} alignSelf="center" width="100%">
+          <Text fontSize="$6" fontWeight="bold" textAlign="center">
             Create New Event
           </Text>
           <Input
@@ -40,7 +39,7 @@ export function CreateEventModal({ isOpen, onOpenChange }: CreateEventModalProps
             fontSize="$4"
           />
           {createEventMutation.error && (
-            <Text color="$red10" fontSize="$3" style={{ textAlign: 'center' }}>
+            <Text color="$red10" fontSize="$3" textAlign="center">
               {createEventMutation.error.message}
             </Text>
           )}
@@ -64,12 +63,7 @@ export function CreateEventModal({ isOpen, onOpenChange }: CreateEventModalProps
             </Button>
           </XStack>
         </YStack>
-      </Sheet.Frame>
-      <Sheet.Overlay
-        animation="lazy"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
-      />
-    </Sheet>
+      </YStack>
+    </Modal>
   );
 }
