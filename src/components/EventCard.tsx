@@ -1,54 +1,60 @@
-import { useRouter } from "expo-router";
-import { Button, Card, Text, XStack, YStack } from "tamagui";
-import { EventWithCount } from "../lib/supabase";
+import {useRouter} from "expo-router";
+import {Button, Card, Text, View, XStack} from "tamagui";
+import {Plus} from "@tamagui/lucide-icons";
+import {EventWithCount} from "../lib/supabase";
 
 interface EventCardProps {
-  event: EventWithCount;
-  onIncrement: (eventId: string) => void;
-  isIncrementPending: boolean;
+	event: EventWithCount;
+	onIncrement: (eventId: string) => void;
+	isIncrementPending: boolean;
 }
 
-export function EventCard({ event, onIncrement, isIncrementPending }: EventCardProps) {
-  const router = useRouter();
-  
-  const handleEventPress = (eventId: string) => {
-    router.push(`/event/${eventId}`);
-  };
+export function EventCard({event, onIncrement, isIncrementPending}: EventCardProps) {
+	const router = useRouter();
 
-  return (
-    <Card
-      key={event.id}
-      padding="$4"
-      backgroundColor="$background"
-      borderColor="$borderColor"
-      borderWidth={1}
-      pressStyle={{ opacity: 0.8 }}
-      onPress={() => handleEventPress(event.id)}
-    >
-      <XStack
-        flexDirection="row"
-        style={{ justifyContent: "space-between", alignItems: "center" }}
-      >
-        <YStack flex={1}>
-          <Text fontSize="$5" fontWeight="bold">
-            {event.name}
-          </Text>
-          <Text fontSize="$3">Count: {event.count}</Text>
-        </YStack>
-        <Button
-          size="$3"
-          circular
-          onPress={(e) => {
-            e.stopPropagation();
-            onIncrement(event.id);
-          }}
-          bg="$blue10"
-          color="white"
-          disabled={isIncrementPending}
-        >
-          +
-        </Button>
-      </XStack>
-    </Card>
-  );
+	const handleEventPress = (eventId: string) => {
+		router.push(`/event/${eventId}`);
+	};
+
+	return (
+		<Card
+			key={event.id}
+			p="$3"
+			bg="$background"
+			borderColor="$borderColor"
+			borderWidth={1}
+			onPress={() => handleEventPress(event.id)}
+		>
+			<XStack
+				style={{justifyContent: "space-between", alignItems: "center"}}
+			>
+				<Text fontSize="$6" fontWeight="bold">
+					{event.name}
+				</Text>
+
+				<XStack>
+					<View
+						style={{justifyContent: "center", alignItems: "center"}}
+						px="$4"
+					>
+						<Text fontSize="$6">
+							{event.count}
+						</Text>
+					</View>
+
+					<Button
+						onPress={(e) => {
+							e.stopPropagation();
+							onIncrement(event.id);
+						}}
+						bg="$blue10"
+						disabled={isIncrementPending}
+						px="$2.5"
+					>
+						<Plus color="white"/>
+					</Button>
+				</XStack>
+			</XStack>
+		</Card>
+	);
 }
