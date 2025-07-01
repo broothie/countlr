@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useLayoutEffect, useState } from "react";
 import { Button, Card, ScrollView, Text, XStack, YStack } from "tamagui";
-import { useAuth } from "../../src/lib/auth-hooks";
+import { useAuth } from "../../../src/lib/auth-hooks";
 import {
   useEvent,
   useEventOccurrences,
   useIncrementEvent,
-} from "../../src/lib/event-hooks";
+} from "../../../src/lib/event-hooks";
 
 type Timeframe = "hour" | "day" | "week" | "month" | "year";
 

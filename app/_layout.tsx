@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { TamaguiProvider } from "tamagui";
 import { useAuth } from "../src/lib/auth-hooks";
 import tamaguiConfig from "../tamagui.config";
@@ -10,15 +11,9 @@ function RootNavigator() {
   const { user, loading } = useAuth();
 
   return (
-    <Stack screenOptions={{ title: "Countlr" }}>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={!!user}>
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="event/[id]"
-          options={{
-            title: "Event Details",
-          }}
-        />
+        <Stack.Screen name="(drawer)" />
       </Stack.Protected>
 
       <Stack.Protected guard={!user}>
@@ -40,10 +35,12 @@ function RootNavigator() {
 }
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TamaguiProvider config={tamaguiConfig}>
-        <RootNavigator />
-      </TamaguiProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <TamaguiProvider config={tamaguiConfig}>
+          <RootNavigator />
+        </TamaguiProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
