@@ -5,38 +5,14 @@ export const useEvents = (enabled: boolean = true) => {
   return useQuery({
     queryKey: ["events"],
     queryFn: async (): Promise<EventWithCount[]> => {
-      // Fetch events with their occurrence counts (RLS will filter by user automatically)
-      const { data: eventsData, error: eventsError } = await supabase
-        .from("events")
-        .select("*")
-        .order("created_at", { ascending: true });
+      // Use RPC function to fetch events with counts
+      const { data, error } = await supabase.rpc('get_events_with_counts');
 
-      if (eventsError) {
-        throw new Error(`Error fetching events: ${eventsError.message}`);
+      if (error) {
+        throw new Error(`Error fetching events: ${error.message}`);
       }
 
-      // Fetch occurrence counts for each event
-      const eventsWithCounts = await Promise.all(
-        eventsData.map(async (event) => {
-          const { count, error: countError } = await supabase
-            .from("event_occurrences")
-            .select("*", { count: "exact", head: true })
-            .eq("event_id", event.id);
-
-          if (countError) {
-            console.error(
-              "Error fetching count for event:",
-              event.id,
-              countError,
-            );
-            return { ...event, count: 0 };
-          }
-
-          return { ...event, count: count || 0 };
-        }),
-      );
-
-      return eventsWithCounts;
+      return data || [];
     },
     enabled,
   });
