@@ -1,6 +1,6 @@
-import { router } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useState } from "react";
-import { Button, Card, Input, Text, XStack, YStack } from "tamagui";
+import { Button, Card, Input, Sheet, Text, XStack, YStack } from "tamagui";
 import { useAuth, useSignOut } from "../src/lib/auth-hooks";
 import {
   useCreateEvent,
@@ -15,6 +15,7 @@ export default function EventsPage() {
   const signOutMutation = useSignOut();
   const createEventMutation = useCreateEvent();
   const [newEventName, setNewEventName] = useState("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const handleIncrement = (eventId: string) => {
     incrementMutation.mutate(eventId);
@@ -28,6 +29,7 @@ export default function EventsPage() {
     if (!newEventName.trim()) return;
     createEventMutation.mutate(newEventName.trim());
     setNewEventName("");
+    setIsCreateModalOpen(false);
   };
 
   const handleEventPress = (eventId: string) => {
@@ -73,56 +75,39 @@ export default function EventsPage() {
   }
 
   return (
-    <YStack flex={1} space="$4" p="$4">
-      <XStack
-        style={{ justifyContent: "flex-end", alignItems: "center" }}
-        p="$2"
-      >
-        <Button
-          size="$2"
-          onPress={handleSignOut}
-          bg="$red10"
-          color="white"
-          disabled={signOutMutation.isPending}
-        >
-          Sign Out
-        </Button>
-      </XStack>
-
-      <Card
-        p="$4"
-        backgroundColor="$background"
-        borderColor="$borderColor"
-        borderWidth={1}
-      >
-        <YStack space="$3">
-          <Text fontSize="$5" fontWeight="bold">
-            Create New Event
-          </Text>
-          <XStack space="$2">
-            <Input
-              flex={1}
-              placeholder="Event name"
-              value={newEventName}
-              onChangeText={setNewEventName}
-              onSubmitEditing={handleCreateEvent}
-            />
+    <>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
             <Button
-              onPress={handleCreateEvent}
-              disabled={createEventMutation.isPending || !newEventName.trim()}
+              size="$2"
+              circular
+              onPress={() => setIsCreateModalOpen(true)}
               bg="$green10"
               color="white"
+              mr="$3"
             >
-              {createEventMutation.isPending ? "Creating..." : "Create"}
+              +
             </Button>
-          </XStack>
-          {createEventMutation.error && (
-            <Text color="$red10" fontSize="$2">
-              {createEventMutation.error.message}
-            </Text>
-          )}
-        </YStack>
-      </Card>
+          ),
+        }}
+      />
+      <YStack flex={1} gap="$4" p="$4">
+        <XStack
+          style={{ justifyContent: "flex-end", alignItems: "center" }}
+          p="$2"
+        >
+          <Button
+            size="$2"
+            onPress={handleSignOut}
+            bg="$red10"
+            color="white"
+            disabled={signOutMutation.isPending}
+          >
+            Sign Out
+          </Button>
+        </XStack>
+
 
       {events.map((event) => (
         <Card
@@ -160,6 +145,60 @@ export default function EventsPage() {
           </XStack>
         </Card>
       ))}
-    </YStack>
+
+      <Sheet
+        modal
+        open={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        snapPointsMode="fit"
+        dismissOnSnapToBottom
+      >
+        <Sheet.Frame p="$4" bg="$background" pb="$6">
+          <Sheet.Handle />
+          <YStack gap="$4" pb="$4">
+            <Text fontSize="$6" fontWeight="bold" style={{ textAlign: 'center' }}>
+              Create New Event
+            </Text>
+            <Input
+              placeholder="Event name"
+              value={newEventName}
+              onChangeText={setNewEventName}
+              onSubmitEditing={handleCreateEvent}
+              fontSize="$4"
+            />
+            {createEventMutation.error && (
+              <Text color="$red10" fontSize="$3" style={{ textAlign: 'center' }}>
+                {createEventMutation.error.message}
+              </Text>
+            )}
+            <XStack gap="$3">
+              <Button
+                flex={1}
+                onPress={() => setIsCreateModalOpen(false)}
+                bg="$backgroundPress"
+                color="white"
+              >
+                Cancel
+              </Button>
+              <Button
+                flex={1}
+                onPress={handleCreateEvent}
+                disabled={createEventMutation.isPending || !newEventName.trim()}
+                bg="$green10"
+                color="white"
+              >
+                {createEventMutation.isPending ? "Creating..." : "Create"}
+              </Button>
+            </XStack>
+          </YStack>
+        </Sheet.Frame>
+        <Sheet.Overlay
+          animation="lazy"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+      </Sheet>
+      </YStack>
+    </>
   );
 }
