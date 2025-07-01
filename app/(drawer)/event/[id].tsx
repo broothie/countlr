@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useLayoutEffect, useState } from "react";
 import { Button, Card, ScrollView, Text, XStack, YStack } from "tamagui";
 import { useAuth } from "../../../src/lib/auth-hooks";
@@ -12,6 +12,7 @@ import {
 type Timeframe = "hour" | "day" | "week" | "month" | "year";
 
 export default function EventDetailPage() {
+  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { user, loading } = useAuth();
   const { data: event, isLoading, error } = useEvent(id, !!user);

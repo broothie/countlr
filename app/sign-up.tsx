@@ -1,9 +1,11 @@
-import {router} from "expo-router";
+import {Link, useRouter} from "expo-router";
 import React, {useEffect, useState} from "react";
 import {Button, Card, Input, Text, XStack, YStack} from "tamagui";
 import {useSignUp} from "../src/lib/auth-hooks";
 
 export default function SignUpPage() {
+	const router = useRouter();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -27,6 +29,7 @@ export default function SignUpPage() {
 			style={{justifyContent: "center", alignItems: "center"}}
 			p="$4"
 		>
+			{/* @ts-ignore */}
 			<Card p="$6" width="100%" maxWidth="$30">
 				<YStack gap="$4">
 					<Text fontSize="$8" fontWeight="bold" style={{textAlign: "center"}}>
@@ -48,6 +51,8 @@ export default function SignUpPage() {
 						onChangeText={setPassword}
 						secureTextEntry
 						autoComplete="password"
+						onSubmitEditing={handleSubmit}
+						returnKeyType="go"
 					/>
 
 					{signUpMutation.error && (
@@ -61,19 +66,23 @@ export default function SignUpPage() {
 						disabled={signUpMutation.isPending || !email || !password}
 						bg="$blue10"
 						color="white"
+						fontWeight="700"
 					>
 						{signUpMutation.isPending ? "Loading..." : "Sign Up"}
 					</Button>
 
+					{/* @ts-ignore */}
 					<XStack gap="$3" justifyContent="center" alignItems="center">
 						<Text>Already have an account?</Text>
-						<Button
-							variant="outlined"
-							size="$2"
-							onPress={() => router.replace("/sign-in")}
-						>
-							Sign In
-						</Button>
+
+						<Link href="/sign-in" asChild>
+							<Button
+								size="$2"
+								fontWeight="500"
+							>
+								Sign In
+							</Button>
+						</Link>
 					</XStack>
 				</YStack>
 			</Card>

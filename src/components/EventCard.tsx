@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { Button, Card, Text, XStack, YStack } from "tamagui";
 import { EventWithCount } from "../lib/supabase";
 
@@ -9,6 +9,8 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onIncrement, isIncrementPending }: EventCardProps) {
+  const router = useRouter();
+  
   const handleEventPress = (eventId: string) => {
     router.push(`/event/${eventId}`);
   };

@@ -1,4 +1,4 @@
-import {router, Stack} from "expo-router";
+import {Stack, useRouter} from "expo-router";
 import {useState} from "react";
 import {Text, YStack} from "tamagui";
 import {useAuth} from "../../src/lib/auth-hooks";
@@ -8,6 +8,7 @@ import {CreateEventModal} from "../../src/components/CreateEventModal";
 import {EventCard} from "../../src/components/EventCard";
 
 export default function EventsPage() {
+  const router = useRouter();
   const { user, loading } = useAuth();
   const { data: events = [], isLoading, error } = useEvents(!!user);
   const incrementMutation = useIncrementEvent();

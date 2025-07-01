@@ -1,10 +1,11 @@
 import { Drawer } from "expo-router/drawer";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { Button, YStack } from "tamagui";
 import { useSignOut } from "../../src/lib/auth-hooks";
 
 function CustomDrawerContent(props: any) {
+  const router = useRouter();
   const signOutMutation = useSignOut();
 
   const handleSignOut = () => {
