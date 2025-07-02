@@ -1274,7 +1274,8 @@
             "acceptsClassName": true,
             "defaultProps": {
               "flexDirection": "column",
-              "tag": "fieldset"
+              "tag": "fieldset",
+              "borderWidth": 0
             },
             "validStyles": {
               "backfaceVisibility": true,
@@ -27473,7 +27474,7 @@
       },
       "usePresence": "Function",
       "ResetPresence": "Function",
-      "supportsCSSVars": true,
+      "supportsCSS": true,
       "useAnimatedNumber": "Function",
       "useAnimatedNumberReaction": "Function",
       "useAnimatedNumberStyle": "Function",

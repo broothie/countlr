@@ -56,6 +56,7 @@ export default function DrawerLayout() {
       }}
     >
       <Drawer.Screen name="index" options={{ title: "Events" }} />
+      <Drawer.Screen name="account" options={{ title: "Account" }} />
       <Drawer.Screen name="event/[id]" />
     </Drawer>
   );

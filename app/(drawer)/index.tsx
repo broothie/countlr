@@ -1,11 +1,12 @@
-import {useRouter} from "expo-router";
+import {Stack, useRouter} from "expo-router";
 import {useState} from "react";
+import {TouchableOpacity} from "react-native";
 import {Button, Text, YStack} from "tamagui";
+import {Plus, User} from "@tamagui/lucide-icons";
 import {useAuth} from "../../src/lib/auth-hooks";
 import {useEvents, useIncrementEvent} from "../../src/lib/event-hooks";
 import {CreateEventModal} from "../../src/components/CreateEventModal";
 import {EventCard} from "../../src/components/EventCard";
-import {Plus} from "@tamagui/lucide-icons";
 
 export default function EventsPage() {
 	const router = useRouter();
@@ -59,6 +60,19 @@ export default function EventsPage() {
 
 	return (
 		<>
+			<Stack.Screen
+				options={{
+					headerRight: () => (
+						<TouchableOpacity
+							onPress={() => router.push("/account")}
+							style={{marginRight: 16}}
+						>
+							<User size={24} color="#000" />
+						</TouchableOpacity>
+					),
+				}}
+			/>
+
 			<YStack flex={1} gap="$4" p="$4">
 				{events.map((event) => (
 					<EventCard
