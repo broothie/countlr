@@ -3004,7 +3004,7 @@
     "@tamagui/text" "1.129.12"
     "@tamagui/use-controllable-state" "1.129.12"
 
-"@tamagui/types@1.129.12":
+"@tamagui/types@^1.129.12", "@tamagui/types@1.129.12":
   version "1.129.12"
   resolved "https://registry.npmjs.org/@tamagui/types/-/types-1.129.12.tgz"
   integrity sha512-/hjYRjwDaErjmNkFecorAViZQvxIpQ2frSABfTKdyGv/G7r1mbdGlMK2KAMOpqCK4gEPdp9TxzJwZ7oNFbT50Q==
