@@ -1,7 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useLayoutEffect, useState } from "react";
+import { TouchableOpacity } from "react-native";
 import { Button, Card, ScrollView, Text, XStack, YStack } from "tamagui";
+import { ArrowLeft } from "@tamagui/lucide-icons";
 import { useAuth } from "../../../src/lib/auth-hooks";
 import {
   useEvent,
@@ -26,9 +28,17 @@ export default function EventDetailPage() {
     if (event?.name) {
       navigation.setOptions({
         title: event.name,
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{ marginLeft: 16 }}
+          >
+            <ArrowLeft size={24} color="#000" />
+          </TouchableOpacity>
+        ),
       });
     }
-  }, [event?.name, navigation]);
+  }, [event?.name, navigation, router]);
 
   const handleIncrement = () => {
     if (id) {
