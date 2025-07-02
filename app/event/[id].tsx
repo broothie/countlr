@@ -4,6 +4,7 @@ import { useLayoutEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Button, Card, ScrollView, Text, XStack, YStack } from "tamagui";
 import { ArrowLeft } from "@tamagui/lucide-icons";
+import { EventCard } from "../../src/components/EventCard";
 import { useAuth } from "../../src/lib/auth-hooks";
 import {
   useEvent,
@@ -27,7 +28,6 @@ export default function EventDetailPage() {
   useLayoutEffect(() => {
     if (event?.name) {
       navigation.setOptions({
-        title: event.name,
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => router.back()}
@@ -98,11 +98,6 @@ export default function EventDetailPage() {
     );
   }
 
-  if (!user) {
-    router.replace("/sign-in");
-    return null;
-  }
-
   if (isLoading) {
     return (
       <YStack
@@ -137,33 +132,8 @@ export default function EventDetailPage() {
   }
 
   return (
-    <YStack flex={1} space="$4" p="$4">
-      <Card
-        p="$6"
-        backgroundColor="$background"
-        borderColor="$borderColor"
-        borderWidth={1}
-      >
-        <YStack space="$4" style={{ alignItems: "center" }}>
-          <Text fontSize="$8" fontWeight="bold">
-            {event.name}
-          </Text>
-          <Text fontSize="$10" fontWeight="bold" color="$blue10">
-            {event.count}
-          </Text>
-          <Button
-            size="$5"
-            circular
-            onPress={handleIncrement}
-            bg="$blue10"
-            color="white"
-            width={80}
-            height={80}
-          >
-            <Text fontSize="$6">+</Text>
-          </Button>
-        </YStack>
-      </Card>
+    <YStack flex={1} gap="$4" p="$4">
+      <EventCard event={event} onIncrement={handleIncrement} />
 
       <Card
         p="$4"
@@ -171,7 +141,7 @@ export default function EventDetailPage() {
         borderColor="$borderColor"
         borderWidth={1}
       >
-        <YStack space="$4">
+        <YStack gap="$4">
           <Text fontSize="$6" fontWeight="bold">
             Timeline
           </Text>
@@ -193,7 +163,7 @@ export default function EventDetailPage() {
           </XStack>
 
           <ScrollView height={300} showsVerticalScrollIndicator={false}>
-            <YStack space="$2">
+            <YStack gap="$2">
               {occurrencesLoading ? (
                 <Text>Loading timeline...</Text>
               ) : occurrences && occurrences.length > 0 ? (
@@ -205,7 +175,7 @@ export default function EventDetailPage() {
                     borderColor="$borderColor"
                     borderWidth={1}
                   >
-                    <XStack space="$2">
+                    <XStack gap="$2">
                       <Text fontSize="$4" fontWeight="500" flex={1}>
                         {formatTime(occurrence.created_at)}
                       </Text>
