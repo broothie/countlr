@@ -4,7 +4,7 @@ import {useLayoutEffect} from "react";
 import {TouchableOpacity} from "react-native";
 import {Button, Card, Text, YStack} from "tamagui";
 import {ArrowLeft} from "@tamagui/lucide-icons";
-import {useAuth, useSignOut} from "../../src/lib/auth-hooks";
+import {useAuth, useSignOut} from "../src/lib/auth-hooks";
 
 export default function AccountDetailsPage() {
 	const router = useRouter();

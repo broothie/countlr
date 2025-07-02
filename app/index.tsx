@@ -3,10 +3,10 @@ import {useState} from "react";
 import {TouchableOpacity} from "react-native";
 import {Button, Text, YStack} from "tamagui";
 import {Plus, User} from "@tamagui/lucide-icons";
-import {useAuth} from "../../src/lib/auth-hooks";
-import {useEvents, useIncrementEvent} from "../../src/lib/event-hooks";
-import {CreateEventModal} from "../../src/components/CreateEventModal";
-import {EventCard} from "../../src/components/EventCard";
+import {useAuth} from "../src/lib/auth-hooks";
+import {useEvents, useIncrementEvent} from "../src/lib/event-hooks";
+import {CreateEventModal} from "../src/components/CreateEventModal";
+import {EventCard} from "../src/components/EventCard";
 
 export default function EventsPage() {
 	const router = useRouter();
