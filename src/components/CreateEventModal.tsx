@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {Modal} from "react-native";
+import {useEffect, useRef, useState} from "react";
+import {Modal, TextInput} from "react-native";
 import {Button, Input, Text, XStack, YStack} from "tamagui";
 import {useCreateEvent} from "../lib/event-hooks";
 
@@ -11,6 +11,16 @@ interface CreateEventModalProps {
 export function CreateEventModal({isOpen, onOpenChange}: CreateEventModalProps) {
 	const createEventMutation = useCreateEvent();
 	const [newEventName, setNewEventName] = useState("");
+	const inputRef = useRef<TextInput>(null);
+
+	useEffect(() => {
+		if (isOpen) {
+			const timer = setTimeout(() => {
+				inputRef.current?.focus();
+			}, 100);
+			return () => clearTimeout(timer);
+		}
+	}, [isOpen]);
 
 	const handleCreateEvent = () => {
 		if (!newEventName.trim()) return;
@@ -32,12 +42,12 @@ export function CreateEventModal({isOpen, onOpenChange}: CreateEventModalProps) 
 						Create New Event
 					</Text>
 					<Input
+						ref={inputRef}
 						placeholder="Event name"
 						value={newEventName}
 						onChangeText={setNewEventName}
 						onSubmitEditing={handleCreateEvent}
 						fontSize="$4"
-						autoFocus={true}
 					/>
 					{createEventMutation.error && (
 						<Text color="$red10" fontSize="$3" textAlign="center">
