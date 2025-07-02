@@ -19,15 +19,11 @@ export function EventCard({event, onIncrement, isIncrementPending}: EventCardPro
 	return (
 		<Card
 			key={event.id}
-			p="$3"
-			bg="$background"
-			borderColor="$borderColor"
-			borderWidth={1}
+			p="$4"
+			bg="white"
 			onPress={() => handleEventPress(event.id)}
 		>
-			<XStack
-				style={{justifyContent: "space-between", alignItems: "center"}}
-			>
+			<XStack style={{justifyContent: "space-between", alignItems: "center"}}>
 				<Text fontSize="$6" fontWeight="bold">
 					{event.name}
 				</Text>
@@ -37,7 +33,7 @@ export function EventCard({event, onIncrement, isIncrementPending}: EventCardPro
 						style={{justifyContent: "center", alignItems: "center"}}
 						px="$4"
 					>
-						<Text fontSize="$6">
+						<Text fontSize="$8" fontWeight="bold">
 							{event.count}
 						</Text>
 					</View>
@@ -49,7 +45,7 @@ export function EventCard({event, onIncrement, isIncrementPending}: EventCardPro
 						}}
 						bg="$blue10"
 						disabled={isIncrementPending}
-						px="$2.5"
+						size="$5"
 					>
 						<Plus color="white"/>
 					</Button>

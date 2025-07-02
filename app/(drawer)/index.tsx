@@ -59,7 +59,6 @@ export default function EventsPage() {
 
 	return (
 		<>
-
 			<YStack flex={1} gap="$4" p="$4">
 				{events.map((event) => (
 					<EventCard
