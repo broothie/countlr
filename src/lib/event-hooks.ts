@@ -18,6 +18,8 @@ export const useEvents = (enabled: boolean = true) => {
   });
 };
 
+// Hook for incrementing event counts with optimistic updates
+// Updates UI immediately when called, then rolls back if the request fails
 export const useIncrementEvent = () => {
   const queryClient = useQueryClient();
 
@@ -33,8 +35,14 @@ export const useIncrementEvent = () => {
 
       return eventId;
     },
-    onSuccess: (eventId) => {
-      // Optimistically update the cache
+    onMutate: async (eventId) => {
+      // Cancel any outgoing refetches to avoid race conditions
+      await queryClient.cancelQueries({ queryKey: ["events"] });
+
+      // Snapshot the previous value for potential rollback
+      const previousEvents = queryClient.getQueryData<EventWithCount[]>(["events"]);
+
+      // Optimistically update the cache - UI updates immediately
       queryClient.setQueryData<EventWithCount[]>(["events"], (old) => {
         if (!old) return old;
         return old.map((event) =>
@@ -42,11 +50,22 @@ export const useIncrementEvent = () => {
         );
       });
 
-      // Invalidate occurrences queries for this event
-      queryClient.invalidateQueries({
-        queryKey: ["event-occurrences", eventId],
-        exact: false,
-      });
+      // Return context for rollback if mutation fails
+      return { previousEvents };
+    },
+    onError: (err, eventId, context) => {
+      // Roll back to previous state if mutation fails
+      queryClient.setQueryData(["events"], context?.previousEvents);
+    },
+    onSettled: (eventId) => {
+      // Refetch to ensure data consistency regardless of success/failure
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      if (eventId) {
+        queryClient.invalidateQueries({
+          queryKey: ["event-occurrences", eventId],
+          exact: false,
+        });
+      }
     },
   });
 };

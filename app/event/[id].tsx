@@ -157,7 +157,6 @@ export default function EventDetailPage() {
             onPress={handleIncrement}
             bg="$blue10"
             color="white"
-            disabled={incrementMutation.isPending}
             width={80}
             height={80}
           >

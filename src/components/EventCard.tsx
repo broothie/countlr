@@ -6,10 +6,9 @@ import {EventWithCount} from "../lib/supabase";
 interface EventCardProps {
 	event: EventWithCount;
 	onIncrement: (eventId: string) => void;
-	isIncrementPending: boolean;
 }
 
-export function EventCard({event, onIncrement, isIncrementPending}: EventCardProps) {
+export function EventCard({event, onIncrement}: EventCardProps) {
 	const router = useRouter();
 
 	const handleEventPress = (eventId: string) => {
@@ -44,7 +43,6 @@ export function EventCard({event, onIncrement, isIncrementPending}: EventCardPro
 							onIncrement(event.id);
 						}}
 						bg="$blue10"
-						disabled={isIncrementPending}
 						size="$5"
 					>
 						<Plus color="white"/>

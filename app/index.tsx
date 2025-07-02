@@ -79,7 +79,6 @@ export default function EventsPage() {
 						key={event.id}
 						event={event}
 						onIncrement={handleIncrement}
-						isIncrementPending={incrementMutation.isPending}
 					/>
 				))}
 
