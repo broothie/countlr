@@ -14,10 +14,6 @@ function RootNavigator() {
     <Stack
       screenOptions={{
         title: "Countlr",
-        headerStyle: {
-          backgroundColor: "#fff",
-        },
-        headerTintColor: "#000",
         headerTitleStyle: {
           fontWeight: "bold",
         },
