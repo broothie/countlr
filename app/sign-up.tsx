@@ -43,6 +43,9 @@ export default function SignUpPage() {
 						keyboardType="email-address"
 						autoCapitalize="none"
 						autoComplete="email"
+						bg="white"
+						borderColor="#d1d5db"
+						borderWidth={1}
 					/>
 
 					<Input
@@ -53,6 +56,9 @@ export default function SignUpPage() {
 						autoComplete="password"
 						onSubmitEditing={handleSubmit}
 						returnKeyType="go"
+						bg="white"
+						borderColor="#d1d5db"
+						borderWidth={1}
 					/>
 
 					{signUpMutation.error && (
