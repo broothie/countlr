@@ -1,4 +1,4 @@
-package com.adbooth.countlr
+package com.broothie.countlr
 
 import android.app.Application
 import android.content.res.Configuration

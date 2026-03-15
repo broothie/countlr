@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.adbooth.countlr"
+      "package": "com.broothie.countlr"
     },
     "web": {
       "favicon": "./assets/favicon.png"

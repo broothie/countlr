@@ -87,9 +87,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.adbooth.countlr'
+    namespace 'com.broothie.countlr'
     defaultConfig {
-        applicationId 'com.adbooth.countlr'
+        applicationId 'com.broothie.countlr'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

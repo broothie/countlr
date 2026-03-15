@@ -1,4 +1,4 @@
-package com.adbooth.countlr
+package com.broothie.countlr
 
 import android.os.Build
 import android.os.Bundle
