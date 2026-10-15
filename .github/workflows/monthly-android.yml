@@ -1,0 +1,55 @@
+name: Monthly Android submission
+
+on:
+  schedule:
+    # 09:17 UTC on the first of each month.
+    - cron: "17 9 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monthly-android-submission
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_NO_TELEMETRY: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+
+      - name: Install Yarn
+        run: |
+          npm install --prefix "$RUNNER_TEMP/yarn" --no-audit --no-fund @yarnpkg/cli-dist@4.9.2
+          echo "$RUNNER_TEMP/yarn/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: 24.14.0
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Android App Bundle
+        id: build
+        shell: bash
+        run: |
+          set -euo pipefail
+          eas build --platform android --profile monthly --non-interactive --wait --json > "$RUNNER_TEMP/build.json"
+          build_id=$(jq -er 'if length == 1 and .[0].status == "FINISHED" then .[0].id else error("Expected one finished Android build") end' "$RUNNER_TEMP/build.json")
+          echo "id=$build_id" >> "$GITHUB_OUTPUT"
+
+      - name: Submit this build to Google Play internal testing
+        env:
+          BUILD_ID: ${{ steps.build.outputs.id }}
+        run: eas submit --platform android --profile monthly --id "$BUILD_ID" --non-interactive --wait

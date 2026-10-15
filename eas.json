@@ -13,9 +13,25 @@
     },
     "production": {
       "autoIncrement": true
+    },
+    "monthly": {
+      "extends": "production",
+      "environment": "production",
+      "node": "22.14.0",
+      "corepack": true,
+      "yarn": "4.9.2",
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {},
+    "monthly": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      }
+    }
   }
 }
