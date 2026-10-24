@@ -4,6 +4,7 @@
   "packageManager": "yarn@4.9.2",
   "main": "index.ts",
   "scripts": {
+    "eas-build-pre-install": "corepack enable && corepack prepare yarn@4.9.2 --activate",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",

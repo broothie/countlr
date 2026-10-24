@@ -18,7 +18,6 @@
       "extends": "production",
       "environment": "production",
       "node": "22.14.0",
-      "corepack": true,
       "android": {
         "buildType": "app-bundle"
       }
