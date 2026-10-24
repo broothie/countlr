@@ -2,6 +2,54 @@
 
 Countlr is a simple counter app for tracking repeated events over time.
 
+## Monthly Google Play submission
+
+The `Monthly Android submission` GitHub Actions workflow builds the default
+branch on the first of each month at 09:17 UTC and submits that exact Android
+App Bundle to Google Play's **internal testing** track. You can also run it from
+the Actions tab with **Run workflow**. It waits for both the build and submission
+and fails if either fails. It does not promote releases to production.
+
+Before the first run:
+
+Update your local checkout before running the setup commands below:
+
+```bash
+git switch main
+git pull --ff-only
+```
+
+If EAS reports `Missing build profile in eas.json: "monthly"`, your checkout does not contain
+the required configuration; updating EAS CLI alone will not fix that error.
+Scheduled runs require the workflow to be present on the default branch.
+
+1. Add an Expo access token with access to the `broothie/countlr` EAS project as
+   the GitHub repository Actions secret `EXPO_TOKEN`.
+2. With EAS CLI 24.14.0, run `eas credentials --platform android` interactively
+   from this repository. Select the `monthly` profile and configure/reuse the
+   Android signing keystore and Google Play service account key for EAS Submit.
+   Grant that service account access to `com.broothie.countlr` in Play Console,
+   including permission to release to testing tracks. Keep the key in EAS;
+   do not commit it or put it in the workflow.
+3. Configure `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in
+   the EAS project's **production** environment. These are bundled public app
+   settings; use the Supabase anon key, never a service-role key.
+4. Run `eas build:version:get --platform android --profile monthly` and check
+   that the EAS remote version code is at least the highest code already uploaded
+   to Play. If needed, use `eas build:version:set --platform android --profile monthly`
+   to set that baseline. Every subsequent build automatically increments it.
+5. Complete the app's initial Play Console setup and first manual upload if it
+   has never been uploaded before. Clear any outstanding Play policy requirements,
+   then run the workflow manually and check the internal release in Play Console.
+
+EAS build quotas/billing and Google Play policy checks still apply. A successful
+submission does not guarantee that Google clears an account inactivity warning;
+check Policy status after the first release. GitHub can disable scheduled
+workflows in public repositories after 60 days without repository activity;
+re-enable it in Actions if that happens. Monthly builds alone do not guarantee
+that the schedule stays enabled. Configure GitHub Actions failure notifications
+so credential expiry or rejected submissions are visible.
+
 ## Play Store Short Description
 
 Track event counts over time with quick taps and timeline insights.
