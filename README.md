@@ -12,6 +12,17 @@ and fails if either fails. It does not promote releases to production.
 
 Before the first run:
 
+Update your local checkout before running the setup commands below:
+
+```bash
+git switch main
+git pull --ff-only
+```
+
+If EAS reports `Missing build profile in eas.json: "monthly"`, your checkout does not contain
+the required configuration; updating EAS CLI alone will not fix that error.
+Scheduled runs require the workflow to be present on the default branch.
+
 1. Add an Expo access token with access to the `broothie/countlr` EAS project as
    the GitHub repository Actions secret `EXPO_TOKEN`.
 2. With EAS CLI 24.14.0, run `eas credentials --platform android` interactively
